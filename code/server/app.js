@@ -27,6 +27,6 @@ app.use(function (req, res, next) {
 });
 model.once('conneted', function() {
   app.listen(3009, function() {
-    console.log('应用启动： http://localhost:3009');
+    console.log('应用启动： http://192.168.0.251:3009');
   });
 })

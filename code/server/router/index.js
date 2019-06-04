@@ -3,7 +3,7 @@ const userController = require('../controller/UserController');
 var router = express.Router();
 
 function auth(req, res, next) {
-    if (req.get('Authorizontion')) {
+    if (req.get('Authorization')) {
         next();
     } else {
         res.status(401).jsonp({
@@ -14,4 +14,6 @@ function auth(req, res, next) {
 }
 router.post('/user', userController.Userlist);
 router.get('/order', auth, userController.OrderList);
+router.post('/commit', auth, userController.Submitorder);
+router.get('/findcommit', auth, userController.findCommit);
 module.exports = router

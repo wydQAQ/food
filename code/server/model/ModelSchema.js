@@ -38,7 +38,28 @@ mongoose.connect(
       img:String
     });
     model.Order = mongoose.model('commodity',OrderScheme);
-    model.emit('conneted');
+    const SubmitSchema = mongoose.Schema({
+      subTime:String,
+      username:{
+        type:String,
+        required:true
+      },
+      price:{
+        type:Number,
+        required:true
+      },
+      quantity:{
+        type:Number,
+        required:true
+      },
+      commodity:{
+        type:String,
+        required:true
+      }
+
+  });
+  model.Submit = mongoose.model("Submit", SubmitSchema);
+  model.emit('conneted');
   }
 );
 
