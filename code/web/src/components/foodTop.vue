@@ -9,15 +9,33 @@
         <i>X1.0</i>
       </h1>
     </div>
-    <div class="user-list">1</div>
+    <div class="user-list">
+      <div class="userimg">
+        <img :src="loginuser.avatar" alt="">
+        <!-- <img src="../assets/logo.png" alt> -->
+      </div>
+      <div class="username">
+        {{loginuser.username}}
+        <!-- wuyudong -->
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import server from "../lib/server/index.js";
+import { mapState } from "vuex";
+
 export default {
   name: "foodtop",
   data() {
-    return {};
+    return {
+      img: "",
+      name: "",
+    };
+  },
+  computed: {
+    ...mapState(["loginuser"])
   }
 };
 </script>
@@ -32,10 +50,12 @@ export default {
   width: 100%;
   border-radius: 60px;
   .logo {
+    width: 109px;
+    height: 80px;
     img {
-      width: 109px;
-      height: 80px;
-      margin-left: -107px;
+      width: 100%;
+      height: 100%;
+      // margin-left: -107px;
     }
   }
   .top-title {
@@ -71,6 +91,23 @@ export default {
   100% {
     color: yellow;
     text-shadow: 0 0 4px rgb(238, 238, 93);
+  }
+}
+
+.user-list {
+  width: 200px; 
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  .userimg {
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+  }
+  .username {
+    font-size: 16px;
   }
 }
 </style>

@@ -20,6 +20,7 @@
             name="username"
             v-model="username"
             placeholder="用户名"
+
           >
           <i :class="{icon:act_index ===2}" class="iconfont icon-mima icon-two"></i>
           <input
@@ -40,15 +41,19 @@
 <script>
 import "../assets/font/iconfont.css";
 import "element-ui/lib/theme-chalk/index.css";
+import { Message } from "element-ui";
+import server from "../lib/server/index.js";
+import { mapMutations } from "vuex";
+
 export default {
   name: "homepage-hero-module",
   data() {
     return {
       vedioCanPlay: false,
       fixStyle: "",
-      username: "",
-      password: "",
-      act_index: ""
+      username: "wuyudong",
+      act_index: "",
+      password: "123456",
     };
   },
   methods: {
@@ -56,25 +61,47 @@ export default {
       this.vedioCanPlay = true;
     },
     //登录
-    getUserData() {
-      let t = this.username;
-      console.log(t);
-      let h = this.password;
-      console.log(h);
-    },
     //加载过渡方法
+    ...mapMutations(["inituser"]),
+
     openFullScreen() {
-      const loading = this.$loading({
-        lock: true,
-        text: "Loading",
-        spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.7)"
-      });
-      setTimeout(() => {
-        loading.close();
-        // 跳转到订餐页
-        this.$router.push("/about");
-      }, 1000);
+      if (this.username != "" && this.password != "") {
+        server
+          .login({
+            username: this.username,
+            password: this.password
+          })
+          .then(res => {
+            if (res.data.code == 1) {
+              const loading = this.$loading({
+                lock: true,
+                text: "Loading",
+                spinner: "el-icon-loading",
+                background: "rgba(0, 0, 0, 0.7)"
+              });
+
+              sessionStorage.setItem("logintoken", res.data.token);
+              sessionStorage.setItem(
+                "loginuser",
+                JSON.stringify(res.data.user)
+              );
+              this.inituser(res.data.user);
+
+              setTimeout(() => {
+                loading.close();
+                // 跳转到订餐页
+                this.$router.push("/about");
+              }, 1000);
+            } else {
+              Message.error("登录失败 请检查用户名和密码");
+            }
+          })
+          .catch(e => {
+            Message.warning("登录异常");
+          });
+      } else {
+        Message.error("登录失败 请检查用户名和密码");
+      }
     }
   },
   mounted: function() {
